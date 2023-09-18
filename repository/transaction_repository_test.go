@@ -34,24 +34,25 @@ func TestTransactionRepoTestSuite(t *testing.T) {
 }
 
 func (suite *TransactionRepoTestSuite) TestCreateTransaction_Success() {
-	mockData := model.Transactions{
-		Id:              "1",
-		SourceWalletID:  "001",
-		UserId:          "1",
-		PaymentMethodID: "dana",
-		Destination:     "pln",
-		Amount:          50000,
-		Description:     "tagihan listrik",
-		CreateAt:        time.Time{},
-	}
-	rows := sqlmock.NewRows([]string{"id", "Source_wallet_ID", "user_Id", "Payment_Method_id", "destination", "amount", "description", "created_at"})
-	rows.AddRow(mockData.Id, mockData.SourceWalletID, mockData.UserId, mockData.PaymentMethodID, mockData.Destination, mockData.Amount, mockData.Description, mockData.CreateAt)
-	suite.mockSQL.ExpectQuery("INSERT INTO transactions").
-		WithArgs(mockData.SourceWalletID, mockData.UserId, mockData.PaymentMethodID, mockData.Destination, mockData.Amount, mockData.Description, mockData.CreateAt).
-		WillReturnRows(rows)
-	result, err := suite.repo.CreateTransaction(mockData)
-	assert.NoError(suite.T(), err)
-	assert.NotNil(suite.T(), result)
+    mockData := model.Transactions{
+        Id:              "1",
+        SourceWalletID:  "001",
+        UserId:          "1",
+        PaymentMethodID: "dana",
+        Destination:     "pln",
+        Amount:          50000,
+        Description:     "tagihan listrik",
+        CreateAt:        time.Time{}, 
+    }
+    rows := sqlmock.NewRows([]string{"id", "source_wallet_id", "user_id", "payment_method_id", "destination", "amount", "description", "created_at"})
+    rows.AddRow(mockData.Id, mockData.SourceWalletID, mockData.UserId, mockData.PaymentMethodID, mockData.Destination, mockData.Amount, mockData.Description, mockData.CreateAt)
+
+    suite.mockSQL.ExpectExec("INSERT INTO transactions").
+        WithArgs(mockData.SourceWalletID, mockData.UserId, mockData.PaymentMethodID, mockData.Destination, mockData.Amount, mockData.Description, mockData.CreateAt).
+        WillReturnResult(sqlmock.NewResult(1, 1))
+    result, err := suite.repo.CreateTransaction(mockData)
+    assert.NoError(suite.T(), err)
+    assert.NotNil(suite.T(), result)
 }
 
 func (suite *TransactionRepoTestSuite) TestCreateTransaction_Fail() {
