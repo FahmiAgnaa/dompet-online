@@ -10,21 +10,21 @@ type GetTransactionsResponse struct {
 	Amount        int       `json:"amount"`
 	Description   string    `json:"description"`
 	CreateAt      time.Time `json:"time_of_transaction"`
-	User          user      `json:"user"`
-	Wallet        wallet    `json:"wallet"`
-	PaymentMethod paymentMethod
+	User          User      `json:"user"`
+	Wallet        Wallet    `json:"wallet"`
+	PaymentMethod PaymentMethod
 }
 
-type paymentMethod struct {
+type PaymentMethod struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
 
-type user struct {
+type User struct {
 	UserName string `json:"user_name"`
 }
 
-type wallet struct {
+type Wallet struct {
 	RekeningUser string `json:"rekening_user"`
 	Balance      int    `json:"balance"`
 }
